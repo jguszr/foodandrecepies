@@ -55,7 +55,6 @@ saveData<- function(toBeSaved) {
   
 }
 
-
 fetchLinksAndSave <- function(filename = linkfile, nSize = 10) {
   message("Fetchinking links - getting source")
   toBeSaved <- list()

@@ -4,12 +4,14 @@
     {
       "id" : "cybercook",
       "seed" : "http://www.cybercook.com.br",
+      "pattern" : "http://[a-zA-Z]+.(cybercook).com.br/", 
       "ingredients" : "#content li ",
       "premode" : "#modo-de-preparo ol li "
     }, 
     {
       "id" : "tudoGostoso",
       "seed" : "http://www.tudogostoso.com.br",
+      "pattern" : "http://[a-zA-Z]+.(tudogostoso).com.br/", 
       "ingredients" : "#info-user ul li",
       "premode" : ".instructions ol li"
     }
