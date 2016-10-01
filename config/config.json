@@ -1,0 +1,18 @@
+{
+  "sites" : 
+  [
+    {
+      "id" : "cybercook",
+      "seed" : "http://www.cybercook.com.br",
+      "ingredients" : "#content li ",
+      "premode" : "#modo-de-preparo ol li "
+    }, 
+    {
+      "id" : "tudoGostoso",
+      "seed" : "http://www.tudogostoso.com.br",
+      "ingredients" : "#info-user ul li",
+      "premode" : ".instructions ol li"
+    }
+  ]
+
+}
