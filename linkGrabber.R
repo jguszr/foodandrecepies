@@ -62,6 +62,7 @@ fetchLinksAndSave <- function(filename = linkfile, nSize = 10) {
   print(cfg)
   configureData()
   for (seed in cfg$sites$seed) {
+    print(paste("------------------------------------------",seed))
     toBeSaved <- web_crawl(url_seed = cfg$sites$seed, Npages = nSize)
   }
   saveData(toBeSaved)
