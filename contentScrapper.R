@@ -30,6 +30,7 @@ scrapeIt<-function(fname) {
   
   #needs a better filter
   links<- subset(links,grepl("^http|^www",links$address)) 
+  
   content<- list()
   for (l in unique(links$address)) {
     ingredients <- list()
@@ -39,8 +40,8 @@ scrapeIt<-function(fname) {
         message("getting stuff from",l)        
         tryCatch({
             page<- read_html(l)
-            ingredients <- sapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$ingredients )),FUN = html_text)
-            prepMode <- sapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$premode )),FUN = html_text)
+            ingredients <- lapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$ingredients )),FUN = html_text)
+            prepMode <- lapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$premode )),FUN = html_text)
           },
           error= function(e) {
             message("Bad penny !")
@@ -52,8 +53,9 @@ scrapeIt<-function(fname) {
       }
     }
     if(length(ingredients)>0 && length(prepMode)>0) {
-      content <- list("ingredients"=ingredients,"prepmode"=prepMode,"link"=l)
-      write(toJSON(content),file = paste(scrappDataDir,idd,".json",sep = ""),append = TRUE)
+      content <- list("ingredients"=ingredients,"prepmode"=prepMode,"link"=l[1],"ts"=format.Date(Sys.time(),"%h%m%s-%d%m%y"))
+      
+      write(toJSON(content),file = paste(scrappDataDir,format.Date(Sys.time(),"%h%m%s%d%m%y"),".json",sep = ""),append = TRUE)
       print(toJSON(content))    
     } else {
       message("skipping ",l)
