@@ -4,22 +4,25 @@
 
 require(dplyr)
 require(rvest)
+require(jsonlite)
 
 source("linkGrabber.R")
 
 cfg<- loadConfiguration()
 
+scrappDataDir <- "./Data/Scrapper/"
+
 configureScrapperData <- function() {
   message("Checking Scrapper data files")
   
-  if (!file.exists("./Data/Scrapper")) {
-    dir.create("./Data/Scrapper")
+  if (!file.exists(scrappDataDir)) {
+    dir.create(scrappDataDir)
     message("New Folder Created !!")
   }
 }
 
 scrapeIt<-function(fname) {
-  
+  configureScrapperData
   links <- tbl_df(read.table(fname,header=TRUE,sep=";"))
   
   links<- mutate(links, address=as.character(address)) %>%
@@ -48,8 +51,13 @@ scrapeIt<-function(fname) {
         gc()
       }
     }
-    content <- list("ingredients"=ingredients,"prepmode"=prepMode)
-    print(content)    
+    if(length(ingredients)>0 && length(prepMode)>0) {
+      content <- list("ingredients"=ingredients,"prepmode"=prepMode,"link"=l)
+      write(toJSON(content),file = paste(scrappDataDir,idd,".json",sep = ""),append = TRUE)
+      print(toJSON(content))    
+    } else {
+      message("skipping ",l)
+    }
     
   }
   return(content)
