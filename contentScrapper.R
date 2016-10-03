@@ -27,19 +27,26 @@ scrapeIt<-function(fname) {
   
   #needs a better filter
   links<- subset(links,grepl("^http|^www",links$address)) 
-  
+  content<- list()
   for (l in unique(links$address)) {
+    ingredients <- list()
+    prepMode <-list()    
     for(idd in cfg$sites$id) {
       if(grepl(idd,l)>0) {
         message("getting stuff from",l)        
         page<- read_html(l)
-        html_text(page)
-        incredients <- html_nodes(page, subset(cfg$sites,id ==idd)$ingredients )
-        prepMode <- html_nodes(page, subset(cfg$sites,id ==idd)$premode )
-        Sys.sleep(3)
+        ingredients <- sapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$ingredients )),FUN = html_text)
+        prepMode <- sapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$premode )),FUN = html_text)
+
+        Sys.sleep(4)
         gc()
       }
     }
+    content <- list("ingredients"=ingredients,"prepmode"=prepMode)
+    print(content)    
+    
   }
+  return(content)
+  
 }
 
