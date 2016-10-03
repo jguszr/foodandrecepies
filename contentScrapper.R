@@ -34,10 +34,16 @@ scrapeIt<-function(fname) {
     for(idd in cfg$sites$id) {
       if(grepl(idd,l)>0) {
         message("getting stuff from",l)        
-        page<- read_html(l)
-        ingredients <- sapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$ingredients )),FUN = html_text)
-        prepMode <- sapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$premode )),FUN = html_text)
-
+        tryCatch({
+            page<- read_html(l)
+            ingredients <- sapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$ingredients )),FUN = html_text)
+            prepMode <- sapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$premode )),FUN = html_text)
+          },
+          error= function(e) {
+            message("Bad penny !")
+            return(NA)
+          }
+        )
         Sys.sleep(4)
         gc()
       }
