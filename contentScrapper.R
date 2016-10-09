@@ -34,14 +34,16 @@ scrapeIt<-function(fname) {
   content<- list()
   for (l in unique(links$address)) {
     ingredients <- list()
-    prepMode <-list()    
+    prepModes <-list()    
+    titles <- list()
     for(idd in cfg$sites$id) {
       if(grepl(idd,l)>0) {
         message("getting stuff from",l)        
         tryCatch({
             page<- read_html(l)
             ingredients <- lapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$ingredients )),FUN = html_text)
-            prepMode <- lapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$premode )),FUN = html_text)
+            prepModes <- lapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$prepmode )),FUN = html_text)
+            titles <- lapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$title )),FUN = html_text)
           },
           error= function(e) {
             message("Bad penny !")
@@ -52,8 +54,13 @@ scrapeIt<-function(fname) {
         gc()
       }
     }
-    if(length(ingredients)>0 && length(prepMode)>0) {
-      content <- list("ingredients"=ingredients,"prepmode"=prepMode,"link"=l[1],"ts"=format.Date(Sys.time(),"%h%m%s-%d%m%y"))
+    if(length(ingredients)>0 && length(prepModes)>0) {
+      content <- list("title"=titles, 
+                      "ingredients"=ingredients,
+                      "prepmode"=prepModes,
+                      "link"=l[1],
+                      "ts"=format.Date(Sys.time(),"%h%m%s-%d%m%y")
+                      )
       
       write(toJSON(content),file = paste(scrappDataDir,format.Date(Sys.time(),"%h%m%s%d%m%y"),".json",sep = ""),append = TRUE)
       print(toJSON(content))    

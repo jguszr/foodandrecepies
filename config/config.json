@@ -6,14 +6,16 @@
       "seed" : "http://www.cybercook.com.br",
       "pattern" : "http:/*(cybercook).com.br/", 
       "ingredients" : "#content li ",
-      "premode" : "#modo-de-preparo ol li "
+      "prepmode" : "#modo-de-preparo ol li ",
+      "title" : "h1.g.i.fn.fl.titulo-receita-principal.tp.f32"
     }, 
     {
       "id" : "tudoGostoso",
       "seed" : "http://www.tudogostoso.com.br",
       "pattern" : "http://*(tudogostoso).com.br/", 
       "ingredients" : "#info-user ul li",
-      "premode" : ".instructions ol li"
+      "prepmode" : ".instructions ol li",
+      "title" : ".page-recipe .left-content .recipe-title h1, .page-tip .left-content .recipe-title h1"
     }
   ]
 
