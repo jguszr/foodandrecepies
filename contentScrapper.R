@@ -73,3 +73,4 @@ scrapeIt<-function(fname) {
   
 }
 
+scrapeIt(linkfile)

@@ -8,6 +8,8 @@ cfg<- loadConfiguration()
 
 mergedDataDir <- "./Data/Scrapper/Merged/"
 toBeRead <- "./Data/Scrapper/"
+prepFName <-"preparationMode.csv"
+ingredientsFName<-"ingredients.csv"
 
 configureMergedData <- function() {
   message("Checking Merged data files")
@@ -19,20 +21,32 @@ configureMergedData <- function() {
 }
 
 mergeIngredients <- function(toRead=toBeRead) {
-  
-  fileList <- list.files(toRead)
-  ingredients <- matrix()
-  titles <- matrix()
+  configureMergedData()
+  fileList <- list.files(toRead,pattern = "*.json")
+  ingredients <- list()
+  titles <- list()
+  df_prep_final <- data.frame()
+  df_ingredients_final <- data.frame()
   message("files to be read : ", length(fileList))
   for (f in fileList) {
-    jcontent <- fromJSON(paste(toRead,f,sep=""))
-    ingredients <-rbind(ingredients,jcontent$ingredients)
-    #append(titles,rep(jcontent$title,times=length(jcontent$ingredients)))
+    jcontent <- fromJSON(txt=paste(toRead,f,sep=""), simplifyDataFrame = TRUE)
+    df_prep<- data.frame(jcontent$prepmode)
+    names(df_prep) <- c("prepMode")
+    df_prep$recepieName <- rep(jcontent$title,length.out=length(jcontent$prepmode))
+    df_prep$recepieLink <- rep(jcontent$link,length.out=length(jcontent$prepmode))
+    df_prep$originalFile <- rep(f,length.out=length(jcontent$prepmode))
+    df_prep_final<- rbind(df_prep_final,df_prep)
     
-    print(ingredients)
-    print(titles)
+    df_ingredients<- data.frame(jcontent$ingredients)
+    names(df_ingredients) <- c("ingredients")
+    df_ingredients$recepieName <- rep(jcontent$title,length.out=length(jcontent$ingredients))
+    df_ingredients$recepieLink <- rep(jcontent$link,length.out=length(jcontent$ingredients))
+    df_ingredients$originalFile <- rep(f,length.out=length(jcontent$ingredients))
+    df_ingredients_final <- rbind(df_ingredients_final, df_ingredients)
   }
-  return(cbind(ingredients,titles))
+  
+  write.csv(df_prep_final,paste0(mergedDataDir,prepFName))
+  write.csv(df_ingredients_final,paste0(mergedDataDir,ingredientsFName))
 }
 
-tst<-mergeIngredients()
+mergeIngredients()
