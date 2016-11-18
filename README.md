@@ -11,13 +11,14 @@
 
 * define :
   * database (Mongo, MySql, MariaDb, IBM cloundsomething, Amazon Something somenthing)
-  * master configuration file (possible with Json)
   * url seed specific configuration File to handle css selectors, xpath stuff among possible others.
   
 ### Dependencies 
 * rvest
 * XML
 * R Web Scraper http://factotumjack.blogspot.com.br/2015/10/an-r-based-web-crawler-scraper.html 
+* Dplyr
+* jsonlite
 
 ### Contributors
 
@@ -25,9 +26,11 @@
 
 ### basics 
 
-* folders and contents :
-  * exploratory : exploratory code for different libs and assumptions
-  * configuration : it will contains all .json files that will configure different aspects of this project
-  * core : the application functions itself
+1. folders and contents :
+    * _exploratory_ : exploratory code for different libs and assumptions
+    * _config_ : it contains *.json files to configure some aspects of the crawker and scrapper.
+    * _core_ : the application functions itself __to be refactored__
+    * _Data_ : Folder to handle all fetched data and processed the data, the deeper the level more process the original that had being subjected. Folders shoud be named with one single word.
+  
   
   
