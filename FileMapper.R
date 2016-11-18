@@ -44,9 +44,17 @@ mergeIngredients <- function(toRead=toBeRead) {
     df_ingredients$originalFile <- rep(f,length.out=length(jcontent$ingredients))
     df_ingredients_final <- rbind(df_ingredients_final, df_ingredients)
   }
-  
-  write.csv(df_prep_final,paste0(mergedDataDir,prepFName))
-  write.csv(df_ingredients_final,paste0(mergedDataDir,ingredientsFName))
+  if (file.exists(paste0(mergedDataDir,prepFName)) &&
+      file.exists(paste0(mergedDataDir,ingredientsFName))) {
+    
+    write.table(df_prep_final,paste0(mergedDataDir,prepFName),append = TRUE,sep=";")
+    write.table(df_ingredients_final,paste0(mergedDataDir,ingredientsFName), append = TRUE,sep=";" )
+    
+  } else {
+    write.table(df_prep_final,paste0(mergedDataDir,prepFName),append = FALSE,sep=";")
+    write.table(df_ingredients_final,paste0(mergedDataDir,ingredientsFName), append = FALSE,sep=";" )
+    
+  }
 }
 
 mergeIngredients()
