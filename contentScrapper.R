@@ -25,8 +25,17 @@ scrapeIt<-function(fname) {
   configureScrapperData
   links <- tbl_df(read.table(fname,header=TRUE,sep=";"))
   
-  links<- mutate(links, address=as.character(address)) %>%
-    arrange(address)
+  if( "degree_total" %in% names(links)) {
+    message("edgefiles being handle !")
+    #filtering incomplete urls that can be merged with the address field to form a fully functional URL.
+    links<- subset(links,grepl("^/[a-z]",links$degree_total)) 
+    
+    #filtering complete urls that end's with the domain termination (org,br,com etc)
+    links<- subset(links,grepl("\\.br|\\.com/[a-zA-Z]$",links$address)) 
+    links<-mutate(links,address=paste0(as.character(address),as.character(degree_total)))
+  } else {
+    links<- mutate(links, address=as.character(address))  
+  }
   
   #needs a better filter
   links<- subset(links,grepl("^http|^www",links$address)) 
@@ -38,7 +47,7 @@ scrapeIt<-function(fname) {
     titles <- list()
     for(idd in cfg$sites$id) {
       if(grepl(idd,l)>0) {
-        message("getting stuff from",l)        
+        message("getting stuff from ",l)        
         tryCatch({
             page<- read_html(l)
             ingredients <- lapply(as.list(html_nodes(page, subset(cfg$sites,id ==idd)$ingredients )),FUN = html_text)

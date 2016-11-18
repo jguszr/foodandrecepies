@@ -30,14 +30,14 @@ mergeIngredients <- function(toRead=toBeRead) {
   message("files to be read : ", length(fileList))
   for (f in fileList) {
     jcontent <- fromJSON(txt=paste(toRead,f,sep=""), simplifyDataFrame = TRUE)
-    df_prep<- data.frame(jcontent$prepmode)
+    df_prep<- data.frame(jcontent$prepmode, stringsAsFactors = FALSE)
     names(df_prep) <- c("prepMode")
     df_prep$recepieName <- rep(jcontent$title,length.out=length(jcontent$prepmode))
     df_prep$recepieLink <- rep(jcontent$link,length.out=length(jcontent$prepmode))
     df_prep$originalFile <- rep(f,length.out=length(jcontent$prepmode))
     df_prep_final<- rbind(df_prep_final,df_prep)
     
-    df_ingredients<- data.frame(jcontent$ingredients)
+    df_ingredients<- data.frame(jcontent$ingredients, stringsAsFactors = FALSE)
     names(df_ingredients) <- c("ingredients")
     df_ingredients$recepieName <- rep(jcontent$title,length.out=length(jcontent$ingredients))
     df_ingredients$recepieLink <- rep(jcontent$link,length.out=length(jcontent$ingredients))
